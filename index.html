@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>數組進階用法+關於字符串</title>
+    <style>
+        h3{
+            color: red;
+        }
+
+        #box{
+            width: 200px;
+            border: 1px solid gray;
+            text-align: center;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h3>數組的添加/刪除/替換 高級用法(splice)</h3>
+    重點：返回值都是第二個參數的內容<br>
+    // array.splice(start,num) 第一個參數是起始下標 第二個參數是修改幾個個數<br>
+    // array.splice(start,num,str) 第三個參數開始往後都是替換內容
+    <script>
+        var arr=[1,2,3,4,5]
+        var returns=''
+        // returns = arr.splice(0,3) // 從下標0開始 把三個元素移除
+        // returns = arr.splice(0,3,100) // 從下標0開始 把三個元素 修改成100
+        // returns = arr.splice(1,0,87,877,8777) // 從下標1開始 插入87.877.8777
+        console.log(arr);
+    </script>
+
+    <h3>splice案例：數組去重(刪除數組內所有有重複的元素)</h3>
+    以第一個數為基準 拿後面的數跟前面比看看是否相等<br>
+    如果相等就刪除後面那個數 繼續往後比<br>
+    重點：當你刪除後面的數以後 下標必須往回退一個再比較<br>
+    否則就會少比較到一個數 所以 <u style="color: teal;">arr2.splice(j,1) 以後要執行 j--</u>
+    <script>
+        var arr2=[2,2,2,2,44,33,22,2,44,33,2,33,44,5,5,6,7]
+        for(i=0;i<arr2.length;i++){ // 遍歷整個數組
+            for(j=i+1;j<arr2.length;j++){ // j是要比較的數 以第一個為比較對象 所以j是第二個 也就是i+1
+                if(arr2[i]==arr2[j]){
+                    arr2.splice(j,1) // 如果兩個數一樣就刪較目前被比較的數
+                    j-- // 這很重要 刪除後數組長度會-1所以j要跟著減 不然會少比較到一個數字
+                }
+            }
+        }
+        console.log(arr2)
+    </script>
+
+    <h3>數組的join用法</h3>
+    join()用法是把數組裡的元素用join帶入的參數分割 組成字符串<br>
+    比如 array.join('+') console.log()得到的結果就會是 1+2+3+4 <br>
+    重點：當join沒有傳入參數時 分割默認使用',' <br>
+    其 console.log()得到的結果就會是 1,2,3,4 雖然看起來沒變 但它的類型是<u style="color: teal;">字符串</u>
+    <script>
+        var arr3=[1,2,3,4]
+        var str = arr3.join('~')
+        console.log(str)
+    </script>
+
+    <h3>數組的sort用法</h3>
+    sort()用法是把數組裡的元素以字符串的形式比較大小<br>
+    比如 array.sort() console.log()得到的結果就會是<br>
+    <u style="color: teal;">1, 111, 12, 22, 223, 23, 3, 4, 44, 45, 64</u> 這種<br>
+    重點：如果希望它以別種非字符串的形式比較 就必須傳入function<br>
+    當你希望它是從小到大就寫 return a-b 從大到小就寫 return b-a <br>
+    當元素是數字帶有字符串的形式時 就可在 return 時 parseInt() a和b <br>
+    <hr>
+    sort除了可以用來排序外 也可以打亂一個數組的順序 <br>
+    // 當sort中的function返回的值為-1 表示數組中的a項排在b項前(b>a) <br>
+    // 所以要做一個亂序數組 只需要在function裡讓Math.random()隨機出來的數與0.5做比較 <br>
+    // 如果大於0就返回-1( a排在b前面 即a小於b的意思)，反之返回1(b排在a前面 a大於b)
+    <script>
+        var arr4 = [12,3,22,1,45,64,44,4,23,111,223]
+        var str2 = arr4.sort(function(a,b){
+        return a-b
+        })
+        console.log(str2)
+
+        var arr5=['123px','41px','741px','423px','87px']
+        var str3=arr5.sort(function(a,b){
+            return parseInt(a)-parseInt(b)
+        })
+        console.log(str3)
+
+        var arr6=[1,2,3,4,5,6,7,8,9]
+        var str4=arr6.sort(function(){
+            return Math.random() -0.5
+        })
+        console.log(str4)
+    </script>
+
+    <h3>字符串的一些用法</h3>
+    用法一：str.charAt() 返回指定下標的字符<br>
+    用法二：str.indexOf() 返回指定字符首次出現的位置 如果沒有則返回-1<br>
+    // 字符串跟數組一樣 可以通過 str.length 獲取字符串長度或 str[i] 獲取下標
+    <hr>
+    indexOf 小案例：查詢某字符串出現次數<br><br>
+    <input id="str" type="text" placeholder="請輸入查找的關鍵字"><input type="button" value="查詢" onclick="search()"><br>
+    <p id="text">希望每天都是星期天希望每天都是星期天希望每天都是星期天希望每天都是星期天希望每天都是星期天</p>
+    <script>
+        var str5='www.facebook.com'
+        console.log(str5.charAt(3))
+
+        var searchValue='o'
+        for(i=0;i<str5.length;i++){
+            if(str5.charAt(i)==searchValue){
+                console.log(i)
+            }
+        }
+
+        // indexOf(searchValue,fromIndex) 
+        // 參數一是查找的字符串 沒有限制字數 可一次傳一個詞 
+        // 參數二是查找起始下標 參數二可省略不填默認0
+
+        var search=function(){
+            var str6=document.getElementById('text').innerText
+            var searchValue2=document.getElementById('str').value
+            var index=0
+            var times=0
+
+            while(str6.indexOf(searchValue2,index)!=-1){
+            index=str6.indexOf(searchValue2,index) + searchValue2.length
+            times++            
+            }
+            console.log(searchValue2+'出現了'+times+'次')
+        }
+    </script>
+
+    <h3>字符串的substring()用法</h3>
+    小案例：點擊按鈕收起/展開
+    <div id="box">
+        <p id="text2" style="margin: 10px;">
+            我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～<br>
+            我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～<br>我是一堆文字內容～～</p>
+    <input id="bt" type="button" value="收起來" style="margin-bottom: 10px;">
+    </div>
+    
+    <script>
+        var myP =document.getElementById('text2')
+        var str7=myP.innerText
+        var oBt=document.getElementById('bt')
+
+        oBt.isShow=true
+        oBt.onclick=function(){
+            this.isShow= !this.isShow
+            myP.innerText = this.isShow? str7 : str7.substring(0,10)+'....' 
+            oBt.value = this.isShow? '收起來' : '打開來'
+        }
+    </script>
+
+    <h3>split()用法 它可以把字符串分割成數組</h3>
+    參數一：以什麼做為分割符<br>
+    參數二：分割出幾個元素<br>
+    如果沒有傳任何參數 默認會把整個字符串分割成一整個元素<br>
+    如果傳空字符串 會把每一個字符都當作一個元素分割出來
+    <script>
+        var str8='www.ddd.sss.aaa.www'
+        var arr7=str8.split('.').join('123')
+        console.log(arr7)
+
+        // 小案例：反轉字符串 
+        // 先把字符串變成數組 
+        // 用數組的反轉方式把數組反轉
+        // 然後再把數組拼接成字符串
+        var str9='HELLO'
+        console.log(str9.split('').reverse().join(''))
+    </script>
+</body>
+</html>
